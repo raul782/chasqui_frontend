@@ -1,3 +1,8 @@
+import 'package:chasqui_frontend/screens/github_screen.dart';
+import 'package:chasqui_frontend/screens/home_screen.dart';
+import 'package:chasqui_frontend/screens/job_screen.dart';
+import 'package:chasqui_frontend/screens/video_screen.dart';
+
 enum NavLinks { Home, Github, Videos, Resources, Jobs, LogIn }
 
 String displayString(NavLinks link) {
@@ -27,6 +32,19 @@ String displayString(NavLinks link) {
 
     default:
       return "";
+  }
+}
+
+String linkRoute(NavLinks link) {
+  switch (link) {
+    case NavLinks.Github:
+      return GithubScreen.id;
+    case NavLinks.Jobs:
+      return JobScreen.id;
+    case NavLinks.Videos:
+      return VideoScreen.id;
+    default:
+      return HomeScreen.id;
   }
 }
 
