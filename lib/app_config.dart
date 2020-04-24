@@ -6,12 +6,14 @@ import 'api/freshbooks.dart';
 
 class AppConfig {
   final String freshbooksClientId;
+  final String freshbooksClientSecret;
   final String freshbooksAuthorizationnUrl;
   final String freshbooksAccessTokenUrl;
   final String freshbooksRedirectUrl;
 
   AppConfig(
       {this.freshbooksClientId,
+      this.freshbooksClientSecret,
       this.freshbooksAuthorizationnUrl,
       this.freshbooksAccessTokenUrl,
       this.freshbooksRedirectUrl});
@@ -25,10 +27,10 @@ class AppConfig {
 
     final json = jsonDecode(contents);
     String clientId = json['freshbooks']['client_id'];
+    String clientSecret = json['freshbooks']['client_secret'];
     String authorizationUrl = json['freshbooks']['authorization_url'];
     String accessTokenUrl = json['freshbooks']['access_token_url'];
     String redirectUrl = json['freshbooks']['redirect_url'];
-    print('loading freshbook configuration');
 
     if (authorizationUrl == null ||
         accessTokenUrl == null ||
@@ -38,6 +40,7 @@ class AppConfig {
 
     return AppConfig(
         freshbooksClientId: clientId,
+        freshbooksClientSecret: clientSecret,
         freshbooksAuthorizationnUrl: authorizationUrl,
         freshbooksAccessTokenUrl: accessTokenUrl,
         freshbooksRedirectUrl: redirectUrl);

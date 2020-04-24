@@ -1,6 +1,7 @@
 {
   "freshbooks": {
     "client_id" : "CLIENT_ID",
+    "client_secret": "CLIENT_SECRET",
     "authorization_url": "https://my.freshbooks.com/service/auth/oauth/authorize",
     "access_token_url": "https://api.freshbooks.com/auth/oauth/token",
     "redirect_url": "REDIRECT_URL"

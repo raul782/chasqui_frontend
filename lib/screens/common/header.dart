@@ -1,3 +1,4 @@
+import 'package:chasqui_frontend/router.dart' as router;
 import 'package:chasqui_frontend/screens/home_screen.dart';
 import 'package:chasqui_frontend/themes/pallete.dart';
 import 'package:chasqui_frontend/utils/constants.dart';
@@ -44,7 +45,7 @@ class _HeaderState extends State<Header> {
         child: Image.asset(Constants.menuImage, width: 25, height: 25),
         onSelected: (NavLinks value) {
           setState(() {
-            openLink(value);
+            router.goTo(context, linkRoute(value));
           });
         },
         itemBuilder: (BuildContext context) => <PopupMenuEntry<NavLinks>>[
@@ -110,7 +111,7 @@ class _HeaderState extends State<Header> {
                 ),
               ),
               onTap: () {
-                openLink(link);
+                router.goTo(context, linkRoute(link));
               }));
     }).toList();
   }

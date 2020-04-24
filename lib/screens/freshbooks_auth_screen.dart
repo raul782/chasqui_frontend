@@ -1,9 +1,10 @@
 import 'package:chasqui_frontend/app_module.dart';
-import 'package:chasqui_frontend/router.dart' as router;
 import 'package:chasqui_frontend/themes/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'common/header.dart';
 
 class FreshbooksAuthScreen extends StatefulWidget {
   static const String id = '/app/freshbooks/auth';
@@ -20,17 +21,19 @@ class _FreshbooksAuthScreenState extends State<FreshbooksAuthScreen> {
 
     try {
       await appModule.freshbooks().loadClient(_prefs);
-      var user = appModule.freshbooks().getUser();
-      print(user.toString());
+      print(appModule.freshbooks().getClient().identifier);
+      var user = await appModule.freshbooks().getUser();
+      print('User: ${user.toString()}');
     } catch (error) {
-      print(error.toString());
-      await router.navigateToHome(context);
+      print('Grant Auth failed ${error.toString()}');
+      //await router.navigateToHome(context);
     }
   }
 
   @override
   void initState() {
     super.initState();
+    print('FreshbooksAuthScreen');
     grantAuth();
   }
 
@@ -44,7 +47,7 @@ class _FreshbooksAuthScreenState extends State<FreshbooksAuthScreen> {
           backgroundColor: Colors.transparent,
           body: SingleChildScrollView(
             child: Column(
-              children: <Widget>[],
+              children: <Widget>[Header()],
             ),
           ),
         ));

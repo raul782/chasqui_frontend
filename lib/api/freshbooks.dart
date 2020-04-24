@@ -9,6 +9,7 @@ class Freshbooks {
   static const String API_URL = 'https://api.freshbooks.com';
 
   final String clientId;
+  final String clientSecret;
   final Uri authorizationURL;
   final Uri accessTokenURL;
   final String redirectURL;
@@ -20,6 +21,7 @@ class Freshbooks {
 
     return Freshbooks(
       clientId: appConfig.freshbooksClientId,
+      clientSecret: appConfig.freshbooksClientSecret,
       authorizationURL: Uri.parse(appConfig.freshbooksAuthorizationnUrl),
       accessTokenURL: Uri.parse(appConfig.freshbooksAccessTokenUrl),
       redirectURL: appConfig.freshbooksRedirectUrl,
@@ -29,6 +31,7 @@ class Freshbooks {
 
   Freshbooks({
     @required this.clientId,
+    @required this.clientSecret,
     @required this.authorizationURL,
     @required this.accessTokenURL,
     @required this.redirectURL,
@@ -44,28 +47,37 @@ class Freshbooks {
 
   Future<void> loadClient(Future<SharedPreferences> storageF) async {
     final SharedPreferences storage = await storageF;
-    String token;
-    if (storage.containsKey('freshbooks')) {
-      token = storage.getString('freshbooks');
+    String code;
+    if (storage.containsKey('freshbooks_code')) {
+      code = storage.getString('freshbooks_code');
     } else {
       Map<String, String> query =
           UrlHelper.queryParameters(UrlHelper.currentLocation().href);
       print(UrlHelper.currentLocation().href);
       if (query.containsKey('code')) {
-        token = query['code'];
+        code = query['code'];
+        storage.setString('freshbooks_code', code);
       }
     }
 
     oauth2.AuthorizationCodeGrant grant = oauth2.AuthorizationCodeGrant(
         clientId, authorizationURL, accessTokenURL,
-        secret: token);
+        secret: clientSecret);
+    Uri authURL =
+        grant.getAuthorizationUrl(Uri.parse(redirectURL), state: state);
+    print(authURL.toString());
 
-    var parameters = {'state': state, 'code': token};
+    var parameters = {'state': state, 'code': code};
 
     _client = await grant.handleAuthorizationResponse(parameters);
+    print(_client.identifier);
   }
 
-  Future<dynamic> getUser() {
-    return _client.read('$API_URL/auth/api/v1/users/me');
+  oauth2.Client getClient() {
+    return _client;
+  }
+
+  Future<dynamic> getUser() async {
+    return await _client.read('$API_URL/auth/api/v1/users/me');
   }
 }
